@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ContextAI - Smart Business Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-logo">
+            <i class="fa-solid fa-cube"></i>
+        </div>
+
+        <span>ContextAI</span>
+    </div>
+
+
+    <nav class="navigation">
+
+        <a href="#" class="nav-item active" data-page="dashboard">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="#sales" class="nav-item" data-page="sales">
+            <i class="fa-solid fa-chart-column"></i>
+            <span>Sales</span>
+        </a>
+
+        <a href="#customers" class="nav-item" data-page="customers">
+            <i class="fa-solid fa-users"></i>
+            <span>Customers</span>
+        </a>
+
+        <a href="#products" class="nav-item" data-page="products">
+            <i class="fa-solid fa-box"></i>
+            <span>Products</span>
+        </a>
+
+        <a href="#reports" class="nav-item" data-page="reports">
+            <i class="fa-solid fa-file-lines"></i>
+            <span>Reports</span>
+        </a>
+
+        <a href="#settings" class="nav-item" data-page="settings">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-ai" onclick="openAI()" style="cursor: pointer;">
+
+        <div class="ai-small-icon">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+
+        <div>
+            <strong>AI Assistant</strong>
+
+            <p>
+                Ask anything about your
+                business data
+            </p>
+        </div>
+
+        <i class="fa-solid fa-chevron-right"></i>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="main-content">
+
+
+    <!-- =================================================
+         TOP HEADER
+    ================================================= -->
+
+    <header class="top-header">
+
+        <div class="search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                placeholder="Search anything... (e.g., sales, customers, reports)"
+            >
+
+        </div>
+
+
+        <div class="header-right">
+
+            <div class="realtime-badge" id="realtimeBadge" onclick="window.ContextRealtime.toggleStream()" title="Click to pause or resume real-time API feed">
+                <span class="live-dot" id="liveDot"></span>
+                <span id="realtimeBadgeText">Real-Time API: Live</span>
+            </div>
+
+            <div class="notification">
+                <i class="fa-regular fa-bell"></i>
+                <span></span>
+            </div>
+
+
+            <div class="profile">
+
+                <div class="profile-image">
+                    AC
+                </div>
+
+                <div class="profile-info">
+
+                    <strong>Alex Carter</strong>
+
+                    <small>Business Analyst</small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-down"></i>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         ACTIVE FILTER & CONTEXT STATUS BAR
+    ================================================= -->
+
+    <div class="filter-status-bar" id="filterStatusBar" style="margin: 20px 30px 0;">
+
+        <div class="filter-breadcrumbs">
+            <i class="fa-solid fa-sitemap" style="color:#2563eb;"></i>
+            <span>App</span>
+            <i class="fa-solid fa-chevron-right" style="font-size:9px;"></i>
+            <span class="active-crumb">DASHBOARD</span>
+        </div>
+
+        <div class="filter-tags-container">
+            <span style="color:#718096; font-size:11px;">No active filters (All Data)</span>
+        </div>
+
+        <div class="filter-actions">
+            <button class="btn-secondary" onclick="window.ContextAgent.resetAll()">
+                <i class="fa-solid fa-rotate-left"></i> Reset Filters
+            </button>
+            <button class="btn-secondary" onclick="copyCurrentDeepLink()">
+                <i class="fa-solid fa-link"></i> Deep Link
+            </button>
+            <button class="btn-primary" onclick="window.ContextAgent.runBenchmark()">
+                <i class="fa-solid fa-bolt"></i> KPI Benchmarks
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         1. VIEW: DASHBOARD
+    ================================================= -->
+
+    <section class="dashboard-area" id="view-dashboard">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>
+                    Good morning, Alex!
+                </h1>
+
+                <p>
+                    Here's what's happening with your business today.
+                </p>
+
+            </div>
+
+
+            <div class="date-selector">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>
+                    Apr 1, 2025 – Apr 30, 2025
+                </span>
+
+                <i class="fa-solid fa-chevron-down"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             STAT CARDS
+        ================================================= -->
+
+        <div class="stats-grid" id="dashboardStatCards">
+
+
+            <!-- Revenue -->
+
+            <div class="stat-card" id="card-revenue">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon blue">
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                    </div>
+
+                    <div class="mini-line blue-line"></div>
+
+                </div>
+
+                <p>Total Revenue</p>
+
+                <h2>₹12,84,000</h2>
+
+                <div class="growth positive">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    18.4%
+                    <span>vs. last month</span>
+                </div>
+
+            </div>
+
+
+            <!-- Orders -->
+
+            <div class="stat-card" id="card-orders">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon green">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+
+                    <div class="mini-line green-line"></div>
+
+                </div>
+
+                <p>Total Orders</p>
+
+                <h2>2,846</h2>
+
+                <div class="growth positive">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    12.7%
+                    <span>vs. last month</span>
+                </div>
+
+            </div>
+
+
+            <!-- Customers -->
+
+            <div class="stat-card" id="card-customers">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon purple">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <div class="mini-line purple-line"></div>
+
+                </div>
+
+                <p>Total Customers</p>
+
+                <h2>1,924</h2>
+
+                <div class="growth positive">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    8.9%
+                    <span>vs. last month</span>
+                </div>
+
+            </div>
+
+
+            <!-- Average order -->
+
+            <div class="stat-card" id="card-aov">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon orange">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+
+                    <div class="mini-line orange-line"></div>
+
+                </div>
+
+                <p>Avg. Order Value</p>
+
+                <h2>₹4,512</h2>
+
+                <div class="growth positive">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    6.3%
+                    <span>vs. last month</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CHART ROW
+        ================================================= -->
+
+        <div class="charts-grid">
+
+
+            <!-- REVENUE CHART -->
+
+            <div class="panel revenue-panel" id="revenuePanel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Revenue Trend</h3>
+                        <p>Last 7 months</p>
+                    </div>
+
+                    <div class="chart-growth">
+                        <i class="fa-solid fa-arrow-up"></i>
+                        18.4%
+                        <span>vs. last month</span>
+                    </div>
+
+                </div>
+
+
+                <div class="revenue-chart">
+
+                    <div class="y-axis">
+                        <span>15L</span>
+                        <span>12L</span>
+                        <span>9L</span>
+                        <span>6L</span>
+                        <span>3L</span>
+                        <span>0</span>
+                    </div>
+
+
+                    <div class="chart-area">
+
+                        <div class="grid-line line-1"></div>
+                        <div class="grid-line line-2"></div>
+                        <div class="grid-line line-3"></div>
+                        <div class="grid-line line-4"></div>
+                        <div class="grid-line line-5"></div>
+
+
+                        <svg
+                            class="revenue-svg"
+                            viewBox="0 0 700 250"
+                            preserveAspectRatio="none"
+                        >
+
+                            <defs>
+
+                                <linearGradient
+                                    id="areaGradient"
+                                    x1="0"
+                                    y1="0"
+                                    x2="0"
+                                    y2="1"
+                                >
+
+                                    <stop
+                                        offset="0%"
+                                        stop-color="#3b82f6"
+                                        stop-opacity="0.25"
+                                    />
+
+                                    <stop
+                                        offset="100%"
+                                        stop-color="#3b82f6"
+                                        stop-opacity="0"
+                                    />
+
+                                </linearGradient>
+
+                            </defs>
+
+
+                            <path
+                                d="
+                                M 20 190
+                                L 125 155
+                                L 230 145
+                                L 335 105
+                                L 440 102
+                                L 550 70
+                                L 670 35
+                                L 670 250
+                                L 20 250
+                                Z
+                                "
+                                fill="url(#areaGradient)"
+                            />
+
+
+                            <polyline
+                                points="
+                                20,190
+                                125,155
+                                230,145
+                                335,105
+                                440,102
+                                550,70
+                                670,35
+                                "
+                                fill="none"
+                                stroke="#2563eb"
+                                stroke-width="4"
+                            />
+
+
+                            <circle cx="20" cy="190" r="5"
+                                    fill="#2563eb"/>
+
+                            <circle cx="125" cy="155" r="5"
+                                    fill="#2563eb"/>
+
+                            <circle cx="230" cy="145" r="5"
+                                    fill="#2563eb"/>
+
+                            <circle cx="335" cy="105" r="5"
+                                    fill="#2563eb"/>
+
+                            <circle cx="440" cy="102" r="5"
+                                    fill="#2563eb"/>
+
+                            <circle cx="550" cy="70" r="5"
+                                    fill="#2563eb"/>
+
+                            <circle cx="670" cy="35" r="7"
+                                    fill="#2563eb"/>
+
+                        </svg>
+
+
+                        <div class="chart-tooltip">
+                            ₹12,84,000
+                        </div>
+
+
+                        <div class="x-axis">
+
+                            <span>Oct 2024</span>
+                            <span>Nov 2024</span>
+                            <span>Dec 2024</span>
+                            <span>Jan 2025</span>
+                            <span>Feb 2025</span>
+                            <span>Mar 2025</span>
+                            <span>Apr 2025</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SALES BY REGION -->
+
+            <div class="panel region-panel" id="regionPanel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Sales by Region</h3>
+                    </div>
+
+                </div>
+
+
+                <div class="region-content">
+
+
+                    <div class="donut-chart">
+
+                        <div class="donut-center">
+
+                            <strong>₹12.84L</strong>
+
+                            <span>Total Sales</span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="region-list">
+
+                        <div style="cursor:pointer;" onclick="window.ContextAgent.askAI('Filter sales by South region')">
+                            <span class="dot blue-dot"></span>
+                            South
+                            <strong>32.4%</strong>
+                        </div>
+
+                        <div style="cursor:pointer;" onclick="window.ContextAgent.askAI('Filter sales by West region')">
+                            <span class="dot green-dot"></span>
+                            West
+                            <strong>24.8%</strong>
+                        </div>
+
+                        <div style="cursor:pointer;" onclick="window.ContextAgent.askAI('Filter sales by North region')">
+                            <span class="dot purple-dot"></span>
+                            North
+                            <strong>22.1%</strong>
+                        </div>
+
+                        <div style="cursor:pointer;" onclick="window.ContextAgent.askAI('Filter sales by East region')">
+                            <span class="dot orange-dot"></span>
+                            East
+                            <strong>12.7%</strong>
+                        </div>
+
+                        <div style="cursor:pointer;" onclick="window.ContextAgent.askAI('Filter sales by Others')">
+                            <span class="dot gray-dot"></span>
+                            Others
+                            <strong>8.0%</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLES
+        ================================================= -->
+
+        <div class="tables-grid">
+
+
+            <!-- TOP PRODUCTS -->
+
+            <div class="panel table-panel" id="topProductsPanel">
+
+                <div class="table-header">
+
+                    <h3>Top Products</h3>
+
+                    <a href="#products" onclick="window.ContextAgent.askAI('Open products catalog')">View all →</a>
+
+                </div>
+
+
+                <table id="topProductsTable">
+
+                    <thead>
+
+                        <tr>
+                            <th>#</th>
+                            <th>Product</th>
+                            <th>Revenue</th>
+                            <th>Orders</th>
+                            <th>Growth</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <div class="product-name">
+                                    <div class="product-img">🎧</div>
+                                    Wireless Headphones
+                                </div>
+                            </td>
+                            <td>₹2,48,000</td>
+                            <td>542</td>
+                            <td class="table-growth">↑ 24.5%</td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                <div class="product-name">
+                                    <div class="product-img">⌚</div>
+                                    Smart Watch
+                                </div>
+                            </td>
+                            <td>₹1,92,000</td>
+                            <td>421</td>
+                            <td class="table-growth">↑ 18.2%</td>
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td>
+                                <div class="product-name">
+                                    <div class="product-img">💼</div>
+                                    Laptop Sleeve
+                                </div>
+                            </td>
+                            <td>₹1,56,000</td>
+                            <td>368</td>
+                            <td class="table-growth">↑ 12.6%</td>
+                        </tr>
+
+                        <tr>
+                            <td>4</td>
+                            <td>
+                                <div class="product-name">
+                                    <div class="product-img">🔊</div>
+                                    Bluetooth Speaker
+                                </div>
+                            </td>
+                            <td>₹1,24,000</td>
+                            <td>298</td>
+                            <td class="table-growth">↑ 9.8%</td>
+                        </tr>
+
+                        <tr>
+                            <td>5</td>
+                            <td>
+                                <div class="product-name">
+                                    <div class="product-img">🔋</div>
+                                    Power Bank
+                                </div>
+                            </td>
+                            <td>₹98,000</td>
+                            <td>245</td>
+                            <td class="table-growth">↑ 7.3%</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- RECENT ORDERS -->
+
+            <div class="panel table-panel" id="recentOrdersPanel">
+
+                <div class="table-header">
+
+                    <h3>Recent Orders</h3>
+
+                    <a href="#sales" onclick="window.ContextAgent.askAI('Open Sales dashboard')">View all →</a>
+
+                </div>
+
+
+                <table id="recentOrdersTable">
+
+                    <thead>
+
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+                            <td class="order-id">#ORD-1024</td>
+                            <td>Rohan Sharma</td>
+                            <td>₹4,512</td>
+                            <td>
+                                <span class="status delivered">
+                                    Delivered
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="order-id">#ORD-1023</td>
+                            <td>Priya Nair</td>
+                            <td>₹3,240</td>
+                            <td>
+                                <span class="status delivered">
+                                    Delivered
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="order-id">#ORD-1022</td>
+                            <td>Amit Kumar</td>
+                            <td>₹5,780</td>
+                            <td>
+                                <span class="status processing">
+                                    Processing
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="order-id">#ORD-1021</td>
+                            <td>Sneha Patel</td>
+                            <td>₹2,190</td>
+                            <td>
+                                <span class="status shipped">
+                                    Shipped
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="order-id">#ORD-1020</td>
+                            <td>Vikram Singh</td>
+                            <td>₹6,430</td>
+                            <td>
+                                <span class="status delivered">
+                                    Delivered
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             KEY INSIGHTS
+        ================================================= -->
+
+        <div class="panel insights-panel" id="insightsPanel">
+
+            <div class="insights-title">
+
+                <i class="fa-regular fa-lightbulb"></i>
+
+                <h3>Key Insights</h3>
+
+            </div>
+
+
+            <div class="insights-grid">
+
+
+                <div class="insight" style="cursor:pointer;" onclick="window.ContextAgent.askAI('Why did revenue grow by 18.4%?')">
+
+                    <div class="insight-icon green">
+                        ↑
+                    </div>
+
+                    <div>
+                        <strong>Revenue grew by 18.4%</strong>
+                        <p>compared to last month.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="insight" style="cursor:pointer;" onclick="window.ContextAgent.askAI('Explain why South region leads with 32.4%')">
+
+                    <div class="insight-icon blue">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <div>
+                        <strong>South region leads</strong>
+                        <p>with 32.4% of total sales.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="insight" style="cursor:pointer;" onclick="window.ContextAgent.askAI('How are Wireless Headphones performing?')">
+
+                    <div class="insight-icon purple">
+                        ↗
+                    </div>
+
+                    <div>
+                        <strong>Top product</strong>
+                        <p>Wireless Headphones (₹2.48L).</p>
+                    </div>
+
+                </div>
+
+
+                <div class="insight" style="cursor:pointer;" onclick="window.ContextAgent.askAI('Show customer growth details')">
+
+                    <div class="insight-icon orange">
+                        !
+                    </div>
+
+                    <div>
+                        <strong>Customer base increased</strong>
+                        <p>by 8.9% this month.</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         2. VIEW: SALES
+    ================================================= -->
+
+    <section class="dashboard-area" id="view-sales" style="display:none;">
+
+        <div class="page-header">
+            <div>
+                <h1>Sales Analytics & Transactions</h1>
+                <p>Regional distribution, transaction logs, and order status fulfillment.</p>
+            </div>
+
+            <div class="view-controls-bar">
+                <div class="filter-group">
+                    <select class="custom-select" onchange="window.ContextAgent.askAI('Filter sales by ' + this.value + ' region')">
+                        <option value="All">All Regions</option>
+                        <option value="South">South Region</option>
+                        <option value="West">West Region</option>
+                        <option value="North">North Region</option>
+                        <option value="East">East Region</option>
+                    </select>
+
+                    <select class="custom-select" onchange="window.ContextAgent.askAI('Show only ' + this.value + ' orders')">
+                        <option value="All">All Statuses</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Processing">Processing</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon blue"><i class="fa-solid fa-receipt"></i></div>
+                    <div class="mini-line blue-line"></div>
+                </div>
+                <p>Total Gross Volume</p>
+                <h2>₹12,84,000</h2>
+                <div class="growth positive"><i class="fa-solid fa-arrow-up"></i> +18.4% <span>MoM</span></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon green"><i class="fa-solid fa-truck-fast"></i></div>
+                    <div class="mini-line green-line"></div>
+                </div>
+                <p>Fulfillment SLA</p>
+                <h2>94.2%</h2>
+                <div class="growth positive"><i class="fa-solid fa-arrow-up"></i> +2.1% <span>On-time</span></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon purple"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="mini-line purple-line"></div>
+                </div>
+                <p>Top Sales Channel</p>
+                <h2>B2B Direct</h2>
+                <div class="growth positive">₹5.8L <span>Generated</span></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon orange"><i class="fa-solid fa-arrow-rotate-left"></i></div>
+                    <div class="mini-line orange-line"></div>
+                </div>
+                <p>Refund / Return Rate</p>
+                <h2>0.8%</h2>
+                <div class="growth positive"><span>Industry Low</span></div>
+            </div>
+        </div>
+
+        <div class="panel table-panel" id="salesTablePanel">
+            <div class="table-header">
+                <h3>Order Transactions (Filtered Real-time)</h3>
+                <span style="font-size:11px; color:#718096;">Showing live orders</span>
+            </div>
+
+            <table id="ordersTable">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamically rendered via script.js -->
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         3. VIEW: CUSTOMERS
+    ================================================= -->
+
+    <section class="dashboard-area" id="view-customers" style="display:none;">
+
+        <div class="page-header">
+            <div>
+                <h1>Customer Directory & Intelligence</h1>
+                <p>Segmented accounts, customer tiers, and lifetime value tracking.</p>
+            </div>
+
+            <div class="filter-group">
+                <select class="custom-select" onchange="window.ContextAgent.askAI('Open customers directory for ' + this.value + ' tier')">
+                    <option value="All">All Customer Tiers</option>
+                    <option value="VIP">VIP Tier</option>
+                    <option value="Enterprise">Enterprise Tier</option>
+                    <option value="SMB">SMB Tier</option>
+                    <option value="Retail">Retail Tier</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon purple"><i class="fa-solid fa-users"></i></div>
+                    <div class="mini-line purple-line"></div>
+                </div>
+                <p>Total Registered Accounts</p>
+                <h2>1,924</h2>
+                <div class="growth positive"><i class="fa-solid fa-arrow-up"></i> +8.9% <span>MoM</span></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon green"><i class="fa-solid fa-heart"></i></div>
+                    <div class="mini-line green-line"></div>
+                </div>
+                <p>Customer Retention Rate</p>
+                <h2>91.4%</h2>
+                <div class="growth positive"><i class="fa-solid fa-arrow-up"></i> +4.3% <span>Uplift</span></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon blue"><i class="fa-solid fa-gem"></i></div>
+                    <div class="mini-line blue-line"></div>
+                </div>
+                <p>Average Customer LTV</p>
+                <h2>₹84,500</h2>
+                <div class="growth positive"><span>High Margin</span></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <div class="stat-icon orange"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="mini-line orange-line"></div>
+                </div>
+                <p>At-Risk Accounts</p>
+                <h2>1.4%</h2>
+                <div class="growth positive"><span>Monitored</span></div>
+            </div>
+        </div>
+
+        <div class="panel table-panel">
+            <div class="table-header">
+                <h3>Customer Directory</h3>
+                <span style="font-size:11px; color:#718096;">Sorted by Lifetime Value</span>
+            </div>
+
+            <table id="customersTable">
+                <thead>
+                    <tr>
+                        <th>Account ID</th>
+                        <th>Name & Email</th>
+                        <th>Region</th>
+                        <th>Tier</th>
+                        <th>Total Spend</th>
+                        <th>Orders</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamically rendered via script.js -->
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         4. VIEW: PRODUCTS
+    ================================================= -->
+
+    <section class="dashboard-area" id="view-products" style="display:none;">
+
+        <div class="page-header">
+            <div>
+                <h1>Product Catalog & SKU Performance</h1>
+                <p>Track sales velocity, units sold, category performance, and inventory health.</p>
+            </div>
+
+            <div class="filter-group">
+                <select class="custom-select" onchange="window.ContextAgent.askAI('Filter products by category ' + this.value)">
+                    <option value="All">All Categories</option>
+                    <option value="Audio">Audio</option>
+                    <option value="Wearables">Wearables</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Charging">Charging</option>
+                    <option value="Hardware">Hardware</option>
+                </select>
+
+                <select class="custom-select" onchange="window.ContextAgent.askAI('Sort products by ' + this.value)">
+                    <option value="revenue">Sort by Revenue</option>
+                    <option value="orders">Sort by Orders</option>
+                    <option value="growth">Sort by Growth Rate</option>
+                    <option value="name">Sort by Product Name</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="panel table-panel">
+            <div class="table-header">
+                <h3>Product Performance & Inventory Catalog</h3>
+                <a href="javascript:void(0)" onclick="window.ContextAgent.askAI('Why are Wireless Headphones the top product?')">Top Driver Analysis →</a>
+            </div>
+
+            <table id="productsTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product</th>
+                        <th>Revenue</th>
+                        <th>Orders</th>
+                        <th>Growth</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamically rendered via script.js -->
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         5. VIEW: REPORTS
+    ================================================= -->
+
+    <section class="dashboard-area" id="view-reports" style="display:none;">
+
+        <div class="page-header">
+            <div>
+                <h1>Analytical Reports & Period Comparisons</h1>
+                <p>Multi-period variance analysis, revenue waterfalls, and causal drivers.</p>
+            </div>
+
+            <div class="filter-actions">
+                <button class="btn-primary" onclick="window.ContextAgent.askAI('Compare revenue with last month')">
+                    <i class="fa-solid fa-chart-line"></i> Run MoM Comparison
+                </button>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="panel" style="padding: 20px;">
+                <div class="panel-header">
+                    <div>
+                        <h3>Period Comparison (April 2025 vs March 2025)</h3>
+                        <p>Core Financial Metrics</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div style="border: 1px solid #e1e9f3; border-radius: 8px; padding: 14px;">
+                        <span style="color:#718096; font-size:11px;">Gross Platform Revenue</span>
+                        <h3 style="color:#102a56; margin: 4px 0;">₹12,84,000</h3>
+                        <span style="color:#10a86b; font-size:11px; font-weight:600;">+₹1,04,000 (+8.8% vs March ₹11.80L)</span>
+                    </div>
+
+                    <div style="border: 1px solid #e1e9f3; border-radius: 8px; padding: 14px;">
+                        <span style="color:#718096; font-size:11px;">Order Volume</span>
+                        <h3 style="color:#102a56; margin: 4px 0;">2,846 Orders</h3>
+                        <span style="color:#10a86b; font-size:11px; font-weight:600;">+236 orders (+9.0% vs March 2,610)</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px; background: #f8fbff; border: 1px solid #dce8f8; border-radius: 8px; padding: 14px;">
+                    <strong style="color:#1264dc; font-size:12px;"><i class="fa-solid fa-wand-magic-sparkles"></i> Agent Attribution Summary</strong>
+                    <p style="margin-top:6px; font-size:11px; line-height:1.6; color:#344b6a;">
+                        The +18.4% YoY surge in April revenue was driven primarily by the <strong>South region</strong> (contributing 52.3% of net increase). Category-wise, Audio and Wearables represented 68% of the incremental volume.
+                    </p>
+                </div>
+            </div>
+
+            <div class="panel" style="padding: 20px;">
+                <div class="panel-header">
+                    <div>
+                        <h3>Executive Quick Inquiries</h3>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px; display:flex; flex-direction:column; gap:8px;">
+                    <button class="btn-secondary" style="justify-content:start;" onclick="window.ContextAgent.askAI('Why did revenue grow by 18.4%?')">
+                        <i class="fa-solid fa-circle-question" style="color:#2563eb;"></i> Why did revenue grow by 18.4%?
+                    </button>
+                    <button class="btn-secondary" style="justify-content:start;" onclick="window.ContextAgent.askAI('Explain why South region leads with 32.4%')">
+                        <i class="fa-solid fa-map-location-dot" style="color:#10b981;"></i> Explain why South region leads
+                    </button>
+                    <button class="btn-secondary" style="justify-content:start;" onclick="window.ContextAgent.askAI('Compare revenue with last month')">
+                        <i class="fa-solid fa-arrows-split-up-and-left" style="color:#7c3aed;"></i> Compare revenue with last month
+                    </button>
+                    <button class="btn-secondary" style="justify-content:start;" onclick="window.ContextAgent.askAI('Open products catalog')">
+                        <i class="fa-solid fa-box" style="color:#f97316;"></i> Audit top performing SKUs
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         6. VIEW: SETTINGS & METADATA INSPECTOR
+    ===================================================== -->
+
+    <section class="dashboard-area" id="view-settings" style="display:none;">
+
+        <div class="page-header">
+            <div>
+                <h1>Application Metadata & Agent Benchmarks</h1>
+                <p>Knowledge graph of navigation hierarchy, page catalogs, schemas, and live agent KPI evaluations.</p>
+            </div>
+
+            <button class="btn-primary" onclick="window.ContextAgent.runBenchmark()">
+                <i class="fa-solid fa-bolt"></i> Run Agent KPI Benchmarks
+            </button>
+        </div>
+
+        <div class="charts-grid">
+            <div class="panel" style="padding: 20px;">
+                <div class="panel-header">
+                    <div>
+                        <h3>Application Navigation Hierarchy</h3>
+                        <p>Exported Schema from No-Code Platform</p>
+                    </div>
+                </div>
+
+                <div style="margin-top:15px; font-family: ui-monospace, monospace; font-size:11px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:15px; color:#1e293b;">
+                    <div>📂 <strong>Root Application: ContextAI (v2.4.0)</strong></div>
+                    <div style="margin-left:15px;">├── 📄 <strong>/dashboard</strong> (KPIs, Trend Line SVG, Donut Chart, Top Products, Recent Orders)</div>
+                    <div style="margin-left:15px;">├── 📄 <strong>/sales</strong> (Order Transactions Grid, Region/Status Filters, Pipeline)</div>
+                    <div style="margin-left:15px;">├── 📄 <strong>/customers</strong> (Account Directory, Tier Filtering, LTV Metrics)</div>
+                    <div style="margin-left:15px;">├── 📄 <strong>/products</strong> (Product Catalog, SKU Sorting, Category Filters)</div>
+                    <div style="margin-left:15px;">├── 📄 <strong>/reports</strong> (MoM Waterfall, Variance Analysis, Root Cause Engine)</div>
+                    <div style="margin-left:15px;">└── 📄 <strong>/settings</strong> (Metadata Catalog, KPI Benchmarks)</div>
+                </div>
+            </div>
+
+            <div class="panel" style="padding: 20px;">
+                <div class="panel-header">
+                    <div>
+                        <h3>Target KPIs (Benchmark Specs)</h3>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px; display:flex; flex-direction:column; gap:10px; font-size:11px;">
+                    <div style="display:flex; justify-content:space-between; border-bottom:1px solid #edf1f5; padding-bottom:6px;">
+                        <span>Intent-to-Destination Accuracy:</span>
+                        <strong style="color:#10b981;">&gt; 98.0%</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; border-bottom:1px solid #edf1f5; padding-bottom:6px;">
+                        <span>UI-State Correctness (Filters/Sort):</span>
+                        <strong style="color:#10b981;">100.0%</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; border-bottom:1px solid #edf1f5; padding-bottom:6px;">
+                        <span>Action Hallucination Rate:</span>
+                        <strong style="color:#10b981;">0.0% (Zero)</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; border-bottom:1px solid #edf1f5; padding-bottom:6px;">
+                        <span>Average Planning Latency:</span>
+                        <strong style="color:#2563eb;">&lt; 50ms</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between;">
+                        <span>Analytical Faithfulness:</span>
+                        <strong style="color:#10b981;">100% Traceable</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     AI ASSISTANT
+===================================================== -->
+
+<aside class="ai-panel" id="aiPanel">
+
+    <div class="ai-header">
+
+        <div class="ai-title">
+
+            <div class="ai-main-icon">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+
+            <div>
+                <h3>AI Assistant</h3>
+
+                <span>
+                    <i></i>
+                    Online
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="ai-controls">
+            <button onclick="closeAI()">−</button>
+            <button onclick="closeAI()">×</button>
+        </div>
+
+    </div>
+
+
+    <div class="ai-chat" id="aiChat">
+
+        <!-- USER MESSAGE -->
+        <div class="user-message">
+            Show me sales performance for this month.
+            <small>10:24 AM</small>
+        </div>
+
+
+        <!-- AI MESSAGE -->
+        <div class="ai-response">
+
+            <div class="response-icon">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+
+            <div class="response-content">
+
+                <p>
+                    I've analyzed your dashboard.
+                    Sales increased by
+                    <strong>18.4%</strong>
+                    compared to last month.
+                </p>
+
+                <div class="ai-chart">
+
+                    <div class="ai-chart-bars">
+                        <span style="height:35%"></span>
+                        <span style="height:45%"></span>
+                        <span style="height:50%"></span>
+                        <span style="height:60%"></span>
+                        <span style="height:70%"></span>
+                        <span style="height:82%"></span>
+                        <span style="height:95%"></span>
+                    </div>
+
+                    <small>Monthly Revenue</small>
+
+                </div>
+
+                <div class="ai-summary">
+
+                    <div>
+                        <span>Total Revenue</span>
+                        <strong>₹12,84,000</strong>
+                        <small>↑ 18.4%</small>
+                    </div>
+
+                    <div>
+                        <span>Total Orders</span>
+                        <strong>2,846</strong>
+                        <small>↑ 12.7%</small>
+                    </div>
+
+                    <div>
+                        <span>Customers</span>
+                        <strong>1,924</strong>
+                        <small>↑ 8.9%</small>
+                    </div>
+
+                </div>
+
+                <p class="ai-insight">
+                    The strongest growth came from the
+                    <strong>South region</strong>
+                    (32.4% of total sales).
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS CATEGORY CHIPS -->
+        <div class="quick-tabs" style="margin-top: 15px;">
+            <button class="quick-tab-btn active">⚡ Suggested</button>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="quick-actions">
+
+            <button onclick="askAI('Why did revenue grow by 18.4%?')">
+                <i class="fa-solid fa-brain"></i>
+                Why did revenue grow by 18.4%?
+            </button>
+
+            <button onclick="askAI('Compare revenue with last month')">
+                <i class="fa-solid fa-chart-line"></i>
+                Compare revenue with last month
+            </button>
+
+            <button onclick="askAI('Filter sales by South region')">
+                <i class="fa-solid fa-filter"></i>
+                Filter sales by South region
+            </button>
+
+            <button onclick="askAI('Open customers directory for VIP tier')">
+                <i class="fa-solid fa-users"></i>
+                Open customers directory for VIP tier
+            </button>
+
+            <button onclick="askAI('Sort products by revenue descending')">
+                <i class="fa-solid fa-arrow-down-wide-short"></i>
+                Sort products by revenue
+            </button>
+
+            <button onclick="window.ContextAgent.runBenchmark()">
+                <i class="fa-solid fa-bolt"></i>
+                Run KPI Benchmark Suite
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI INPUT -->
+    <div class="ai-input">
+
+        <input
+            type="text"
+            id="aiInput"
+            placeholder="Ask anything about your business..."
+            onkeydown="handleAIEnter(event)"
+        >
+
+        <button onclick="sendAIMessage()">
+            <i class="fa-solid fa-paper-plane"></i>
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     BENCHMARK EVALUATION MODAL
+===================================================== -->
+<div class="app-modal" id="benchmarkModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-microchip" style="color:#2563eb;"></i> ContextAI Agent KPI Benchmark Evaluation</h3>
+            <button class="modal-close-btn" onclick="window.ContextAgent.closeBenchmark()">×</button>
+        </div>
+        <div class="modal-body" id="benchmarkList">
+            <!-- Results will be injected dynamically -->
+        </div>
+    </div>
+</div>
+
+
+<!-- =====================================================
+     APPLICATION AGENT SCRIPT
+===================================================== -->
+<script src="script.js"></script>
+
+</body>
+</html>
